@@ -2,9 +2,9 @@
 import { TransactionCategory, Transaction, AccountInfo, Budget, Notification } from './types';
 
 export const MOCK_ACCOUNTS: AccountInfo[] = [
-  { id: 'acc_1', name: 'Main Checking', balance: 4250.75, type: 'checking' },
-  { id: 'acc_2', name: 'Emergency Fund', balance: 12000.00, type: 'savings' },
-  { id: 'acc_3', name: 'Travel Credit Card', balance: -840.20, type: 'credit' },
+  { id: 'acc_1', name: 'Salary Account', balance: 4250.75, type: 'checking', bankName: 'HDFC Bank', accountNumber: '**** 4512' },
+  { id: 'acc_2', name: 'Emergency Savings', balance: 12000.00, type: 'savings', bankName: 'ICICI Bank', accountNumber: '**** 8829' },
+  { id: 'acc_4', name: 'Physical Wallet', balance: 1500.00, type: 'cash' },
 ];
 
 export const MOCK_TRANSACTIONS: Transaction[] = [

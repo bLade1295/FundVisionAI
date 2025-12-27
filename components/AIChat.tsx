@@ -1,8 +1,8 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { getFinancialAdvice } from '../services/geminiService';
-import { MOCK_TRANSACTIONS, MOCK_ACCOUNTS, MOCK_BUDGETS } from '../constants';
-import { ChatMessage } from '../types';
+import { MOCK_BUDGETS } from '../constants';
+import { ChatMessage, Transaction, AccountInfo } from '../types';
 
 const SUGGESTED_TASKS = [
   { label: "Analyze spending", query: "Can you analyze my spending patterns for the last week?" },
@@ -12,7 +12,12 @@ const SUGGESTED_TASKS = [
   { label: "Expense summary", query: "Summarize my top 3 biggest expenses this month." }
 ];
 
-const AIChat: React.FC = () => {
+interface AIChatProps {
+  transactions: Transaction[];
+  accounts: AccountInfo[];
+}
+
+const AIChat: React.FC<AIChatProps> = ({ transactions, accounts }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     { role: 'model', parts: [{ text: "Namaste! I'm FundVision AI. I've analyzed your recent spending and noticed you spent ₹1,500 more on dining out this week. How can I help you optimize your finances today?" }] }
   ]);
@@ -37,8 +42,8 @@ const AIChat: React.FC = () => {
 
     const advice = await getFinancialAdvice(
       query,
-      MOCK_TRANSACTIONS,
-      MOCK_ACCOUNTS,
+      transactions,
+      accounts,
       MOCK_BUDGETS,
       messages.map(m => ({ role: m.role, parts: m.parts }))
     );

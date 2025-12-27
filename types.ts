@@ -34,7 +34,9 @@ export interface AccountInfo {
   id: string;
   name: string;
   balance: number;
-  type: 'checking' | 'savings' | 'credit';
+  type: 'checking' | 'savings' | 'credit' | 'cash';
+  bankName?: string;
+  accountNumber?: string;
 }
 
 export interface Notification {
