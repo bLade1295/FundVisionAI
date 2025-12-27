@@ -7,7 +7,6 @@ import { Notification } from '../types';
 interface LayoutProps {
   children: React.ReactNode;
   activeTab: string;
-  // Fix: Changed parameter type from void to string to correctly match state setter and usage in handleTabClick
   setActiveTab: (tab: string) => void;
 }
 
@@ -65,16 +64,10 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab }) =>
         </nav>
 
         <div className="p-6 mt-auto">
-          <div className="bg-slate-800 rounded-2xl p-4">
-            <p className="text-xs text-slate-500 mb-2 uppercase font-bold tracking-widest">Plan</p>
-            <div className="flex justify-between items-center mb-1">
-              <span className="text-sm font-bold text-white">Pro Plan</span>
-              <span className="text-[10px] bg-orange-500 text-white px-2 py-0.5 rounded-full uppercase tracking-tighter">Active</span>
-            </div>
-            <p className="text-[10px] text-slate-500 mb-3 leading-tight">Your next billing cycle is in 12 days.</p>
-            <button className="w-full bg-slate-700 hover:bg-slate-600 text-white py-2 text-xs font-bold rounded-lg transition-colors">
-              Manage Billing
-            </button>
+          <div className="bg-slate-800 rounded-2xl p-4 text-center">
+            <p className="text-[10px] text-slate-500 leading-tight">
+              Manage your financial life with AI precision.
+            </p>
           </div>
         </div>
       </aside>
@@ -119,15 +112,8 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab }) =>
         </nav>
 
         <div className="p-6 mt-auto">
-          <div className="bg-slate-800 rounded-2xl p-4">
-            <p className="text-xs text-slate-500 mb-2 uppercase font-bold tracking-widest">Plan</p>
-            <div className="flex justify-between items-center mb-1">
-              <span className="text-sm font-bold text-white">Pro Plan</span>
-              <span className="text-[10px] bg-orange-500 text-white px-2 py-0.5 rounded-full uppercase tracking-tighter">Active</span>
-            </div>
-            <button className="w-full bg-orange-600 text-white py-2 text-xs font-bold rounded-lg mt-2">
-              Upgrade
-            </button>
+          <div className="bg-slate-800 rounded-2xl p-4 text-center">
+             <p className="text-[10px] text-slate-500">FundVision AI v2.4.0</p>
           </div>
         </div>
       </aside>
@@ -170,7 +156,6 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab }) =>
             <div className="flex items-center space-x-3 pl-2">
               <div className="text-right hidden sm:block">
                 <p className="text-xs font-bold text-slate-900 leading-none">Sarah Johnson</p>
-                <p className="text-[10px] text-slate-500 mt-1">Pro Member</p>
               </div>
               <img src="https://picsum.photos/seed/sarah/40/40" className="w-10 h-10 rounded-full ring-2 ring-orange-500 ring-offset-2" alt="Profile" />
             </div>

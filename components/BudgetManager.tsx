@@ -19,8 +19,13 @@ const BudgetManager: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [editValue, setEditValue] = useState<string>('');
 
+  // Add New Budget State
+  const [isAdding, setIsAdding] = useState(false);
+  const [newCategory, setNewCategory] = useState<TransactionCategory | ''>('');
+  const [newLimit, setNewLimit] = useState<string>('');
+
   const handleEdit = (e: React.MouseEvent, budget: Budget) => {
-    e.stopPropagation(); // Prevent opening details when clicking edit
+    e.stopPropagation();
     setEditingCategory(budget.category);
     setEditValue(budget.limit.toString());
   };
@@ -35,6 +40,23 @@ const BudgetManager: React.FC = () => {
     setEditingCategory(null);
   };
 
+  const handleAddBudget = () => {
+    if (!newCategory || !newLimit) return;
+    const limitNum = parseFloat(newLimit);
+    if (isNaN(limitNum) || limitNum < 0) return;
+
+    const newBudget: Budget = {
+      category: newCategory as TransactionCategory,
+      limit: limitNum,
+      spent: 0 // New budgets start with 0 spent
+    };
+
+    setBudgets(prev => [...prev, newBudget]);
+    setIsAdding(false);
+    setNewCategory('');
+    setNewLimit('');
+  };
+
   const toggleCategoryDetails = (category: string) => {
     setSelectedCategory(selectedCategory === category ? null : category);
   };
@@ -42,6 +64,11 @@ const BudgetManager: React.FC = () => {
   const getCategoryTransactions = (category: string): Transaction[] => {
     return MOCK_TRANSACTIONS.filter(t => t.category === category && t.type === 'expense');
   };
+
+  // Filter categories that are not already in the budget list
+  const availableCategories = Object.values(TransactionCategory).filter(
+    cat => !budgets.some(b => b.category === cat) && cat !== TransactionCategory.INCOME
+  );
 
   return (
     <div className="space-y-6">
@@ -149,25 +176,69 @@ const BudgetManager: React.FC = () => {
                   ) : (
                     <p className="text-center py-4 text-sm text-slate-400">No transactions recorded in this category yet.</p>
                   )}
-                  <div className="mt-6 flex justify-center">
-                    <button className="text-xs font-bold text-orange-600 hover:text-orange-700 flex items-center">
-                      Analysis for this Category <i className="fas fa-arrow-right ml-1.5"></i>
-                    </button>
-                  </div>
                 </div>
               )}
             </div>
           );
         })}
 
-        {/* Add New Category Placeholder */}
-        {!selectedCategory && (
-          <button className="bg-white/50 border-2 border-dashed border-orange-200 rounded-2xl p-6 flex flex-col items-center justify-center text-slate-400 hover:border-orange-400 hover:text-orange-500 transition-all group min-h-[160px]">
-            <div className="w-12 h-12 rounded-full border-2 border-dashed border-slate-200 flex items-center justify-center mb-3 group-hover:border-orange-400">
-              <i className="fas fa-plus"></i>
+        {/* Add New Category Logic */}
+        {isAdding ? (
+          <div className="bg-orange-50/50 border-2 border-orange-500 rounded-2xl p-6 shadow-lg shadow-orange-500/10 animate-in zoom-in-95 duration-200">
+            <h4 className="font-bold text-orange-900 text-sm mb-4">New Budget Category</h4>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-[10px] font-black text-orange-600 uppercase mb-1">Select Category</label>
+                <select 
+                  className="w-full px-3 py-2 bg-white border border-orange-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-orange-500/20 transition-all"
+                  value={newCategory}
+                  onChange={(e) => setNewCategory(e.target.value as TransactionCategory)}
+                >
+                  <option value="">Choose one...</option>
+                  {availableCategories.map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-[10px] font-black text-orange-600 uppercase mb-1">Monthly Limit (₹)</label>
+                <input 
+                  type="number"
+                  placeholder="e.g. 5000"
+                  className="w-full px-3 py-2 bg-white border border-orange-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-orange-500/20 transition-all"
+                  value={newLimit}
+                  onChange={(e) => setNewLimit(e.target.value)}
+                />
+              </div>
+              <div className="flex gap-2 pt-2">
+                <button 
+                  onClick={handleAddBudget}
+                  disabled={!newCategory || !newLimit}
+                  className="flex-1 bg-orange-600 text-white py-2 rounded-xl text-xs font-bold hover:bg-orange-700 transition-colors disabled:opacity-50"
+                >
+                  Add Budget
+                </button>
+                <button 
+                  onClick={() => setIsAdding(false)}
+                  className="px-4 py-2 border border-slate-200 text-slate-500 rounded-xl text-xs font-bold hover:bg-slate-50 transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
-            <span className="font-bold text-sm">Add Category Budget</span>
-          </button>
+          </div>
+        ) : (
+          availableCategories.length > 0 && (
+            <button 
+              onClick={() => setIsAdding(true)}
+              className="bg-white/50 border-2 border-dashed border-orange-200 rounded-2xl p-6 flex flex-col items-center justify-center text-slate-400 hover:border-orange-400 hover:text-orange-500 transition-all group min-h-[160px]"
+            >
+              <div className="w-12 h-12 rounded-full border-2 border-dashed border-slate-200 flex items-center justify-center mb-3 group-hover:border-orange-400">
+                <i className="fas fa-plus"></i>
+              </div>
+              <span className="font-bold text-sm">Add Category Budget</span>
+            </button>
+          )
         )}
       </div>
 

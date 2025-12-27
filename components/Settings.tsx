@@ -55,9 +55,6 @@ const Settings: React.FC = () => {
               <>
                 <h2 className="text-2xl font-bold text-slate-800">{userInfo.name}</h2>
                 <p className="text-slate-500 text-sm">{userInfo.email}</p>
-                <div className="mt-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
-                  Pro Member
-                </div>
               </>
             )}
           </div>
